@@ -31,11 +31,11 @@ public class Hw3TemplateApp extends SimplePicoPro {
     Gpio fireButton = GPIO_128;
     Gpio reloadButton = GPIO_39;
 
+
     float[] xyz = {0.f,0.f,0.f}; //store X,Y,Z acceleration of MMA8451 accelerometer here [units: G]
     float a0,a1,a2,a3; //store analog readings from ADS1015 ADC here [units: V]
 
     public void setup() {
-
         // Initialize the serial port for communicating to a PC
         uartInit(UART6,9600);
         //uartInit(UART6,38400);
@@ -44,12 +44,14 @@ public class Hw3TemplateApp extends SimplePicoPro {
         analogInit(); //need to call this first before calling analogRead()
 
         // Initialize the MMQ8451 Accelerometer
+
         try {
             accelerometer = new Mma8451Q("I2C1");
             accelerometer.setMode(Mma8451Q.MODE_ACTIVE);
         } catch (IOException e) {
             Log.e("HW3Template","setup",e);
         }
+
 
         //set edge triggers for fire and reload buttons
         setEdgeTrigger(fireButton, Gpio.EDGE_FALLING);
@@ -67,13 +69,12 @@ public class Hw3TemplateApp extends SimplePicoPro {
 
 
         // read I2C accelerometer and print to UART
+
         try {
             xyz = accelerometer.readSample();
             //println(UART6,"X: "+xyz[0]+"   Y: "+xyz[1]+"   Z: "+xyz[2]);
+
             println(UART6,xyz[0]+","+xyz[1]+","+xyz[2]);
-            //println(UART6,xyz[0]+"");
-            //println(UART6,xyz[1]+"");
-            //println(UART6,xyz[2]+"");
             println(xyz[0]+","+xyz[1]+","+xyz[2]);
 
             //println("X: "+xyz[0]+"   Y: "+xyz[1]+"   Z: "+xyz[2]);
@@ -86,6 +87,7 @@ public class Hw3TemplateApp extends SimplePicoPro {
         }
 
 
+
         delay(10);
 
     }
@@ -96,11 +98,13 @@ public class Hw3TemplateApp extends SimplePicoPro {
 
         // when button is pressed down for pull up resistor switches
         if(pin==fireButton && value==LOW) {
-            print(UART6, "FIRE");
+            println(UART6, "FIRE");
+            println("fire");
         }
         //when 39 goes from HIGH to HIGH
         else if (pin==reloadButton && value==LOW) {
             println(UART6, "RELOAD");
+            println("reload");
         }
     }
 }
