@@ -7,6 +7,8 @@ import java.io.IOException;
 import com.google.android.things.contrib.driver.mma8451q.Mma8451Q;
 import com.google.android.things.pio.Gpio;
 
+import static java.util.Locale.US;
+
 /**
  * HW3 Movement
  * Based on HW3 Template by bjoern on 9/12/17.
@@ -53,10 +55,9 @@ public class MovementApp extends SimplePicoPro {
         // read I2C accelerometer and print to UART
         try {
             xyz = accelerometer.readSample();
-            //println(UART6,"X: "+xyz[0]+"   Y: "+xyz[1]+"   Z: "+xyz[2]);
 
             println(UART6,xyz[0]+","+xyz[1]+","+xyz[2]);
-            println(xyz[0]+","+xyz[1]+","+xyz[2]);
+            println(String.format(US, "%10.5f \t %10.5f \t %10.5f", xyz[0], xyz[1], xyz[2]));
 
             //println("X: "+xyz[0]+"   Y: "+xyz[1]+"   Z: "+xyz[2]);
 
@@ -67,7 +68,7 @@ public class MovementApp extends SimplePicoPro {
             Log.e("Movement","loop",e);
         }
 
-        delay(10);
+        delay(50);
     }
 
     @Override
@@ -75,13 +76,18 @@ public class MovementApp extends SimplePicoPro {
         // when button is pressed down for pull up resistor switches
         // Fire event
         if(pin==fireButton && value==LOW) {
-            println(UART6, "FIRE");
+            println(UART6, "1");
+            delay(25);
+            println(UART6, "3");
             println("fire");
         }
+
         // when button is pressed down for pull up resistor switches
         // reload event
         else if (pin==reloadButton && value==LOW) {
-            println(UART6, "RELOAD");
+            println(UART6, "2");
+            delay(25);
+            println(UART6, "3");
             println("reload");
         }
     }
